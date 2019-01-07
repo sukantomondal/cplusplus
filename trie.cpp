@@ -3,6 +3,18 @@
 #include <unordered_map>
 #include <array>
 
+/*Some useful information about interview practice:
+[2:15 PM] Douglas Bisiw: this course: Grokking the System Design Interview
+[2:15 PM] Douglas Bisiw: from: https://www.educative.io
+[2:15 PM] Douglas Bisiw: and
+[2:16 PM] Douglas Bisiw: and this has the 65 questions
+[2:16 PM] Douglas Bisiw: https://www.algoexpert.io/product
+[2:17 PM] Douglas Bisiw: and you can practice from this website
+[2:17 PM] Douglas Bisiw: https://www.interviewbit.com/
+[2:18 PM] Douglas Bisiw: and if you want, this too
+[2:18 PM] Douglas Bisiw: https://www.dailycodingproblem.com
+*/
+
 using namespace std;
 
 struct node {
