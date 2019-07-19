@@ -18,6 +18,11 @@ struct LessThanCompareAge{
 };
 
 
+bool compare(const Person &p1, const Person &p2){
+
+	return p1.age > p2.age;
+}
+
 int main(){
 
 
@@ -39,6 +44,17 @@ int main(){
 	Person p = pq.top();
 
 	cout << p.name << " " << p.age;
+
+
+	// using different way to pass the comparator
+	//
+	
+	priority_queue<Person, vector<Person>, decltype(&compare)> pq1(&compare);
+	pq1.push(p1);
+	pq1.push(p2);
+
+	Person pp = pq1.top(); 
+        cout << pp.name << " " << pp.age;
 
 	return 0;
 }
