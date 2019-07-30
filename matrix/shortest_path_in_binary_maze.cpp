@@ -104,7 +104,7 @@ int main(){
 	point src = {0,0};
 	point dest = {3,4};
 
-	cout << "Shortest path distance is :" << minpath(mat,src,dest);
+	cout << "Shortest path distance is :" << minpath(mat,src,dest) << "\n";
 
 	return 0;
 
