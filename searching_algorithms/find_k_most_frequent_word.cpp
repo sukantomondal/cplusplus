@@ -1,151 +1,67 @@
-/*Find the k most frequent words from a file
+/* Author : Sukanto Mondal */
+
+
+/*Find the k most frequent words  
+ A simple solution is to use Hashing. Hash all words one by one in a hash table. If a word is already present, then increment its count. Finally, traverse through the hash table and return the k words with maximum counts.
 */
 
+
 #include <iostream>
-#include <vector>
-#include <algorithm>
-#include <string>
 #include <queue>
+#include <string>
 #include <unordered_map>
 
 using namespace std;
 
-#define MAX_CHAR 26
+typedef pair<int, string> whc; /// word heap content 
 
-struct Tnode{
+void print_array(vector<string> arr){
 
-	bool isEnd;
-	int no_of_occurence;
-	Tnode *child [26];
-};
-
-struct qnode{
-	string word;
-	int no_of_occurence;
-};
-
-
-bool compare(qnode q1, qnode q2)
-{
-    return q1.no_of_occurence < q2.no_of_occurence;
+	for(int i = 0; i < arr.size(); i++){
+		cout << arr[i] << " ";
+	}
+	cout << "\n";
 }
 
 
-Tnode * get_new_tnode(){
+void print_k_most_frequent_word(vector<string> words, int k){
 
-	Tnode *tnode = new Tnode;
-	tnode->isEnd =false;
-	tnode->no_of_occurence = 0;
+	priority_queue<whc> wc; // word count
 
-	for(int i = 0; i< 26; i++){
-		tnode->child[i]=NULL;
+	unordered_map<string, int> hcontainer;
+
+	unordered_map<string,int> :: iterator it;
+
+	for(int i = 0; i < words.size(); i++){	
+		it = hcontainer.find(words[i]);
+
+		if(it == hcontainer.end()){ // not found then insert			
+			hcontainer.insert({words[i],1});
+		}else{
+			int w_occurence = ++(it->second);
+			hcontainer.insert({words[i],w_occurence});
+		}	
 	}
 
-	return tnode;
+	for (it = hcontainer.begin() ; it != hcontainer.end() ; ++it){
+		//cout << it->first << " " << it->second << "\n";
+		wc.push({it->second,it->first});
+	}
+
+
+	int count = 0;
+	while(!wc.empty() && count < k){
+		whc temp = wc.top();
+		wc.pop();
+		count ++;
+		cout << temp.first << " " << temp.second << "\n";
+	}
 }
-
-void insert_word(Tnode *root, string word, priority_queue<qnode,vector<qnode>, decltype(&compare)> &pq){
-
-	Tnode *head = root;
-
-	for(char &c : word){
-		if(head->child[c-'a'] == NULL){
-			head->child[c-'a'] = get_new_tnode();
-		}
-		head = head->child[c-'a'];
-	}
-
-	if(!head->isEnd)
-		head->isEnd = true;
-	head->no_of_occurence += 1; 
-
-	qnode qn;
-	qn.word = word;
-	qn.no_of_occurence = head->no_of_occurence;
-	pq.push(qn);
-}
-
-int search_word(Tnode *root, string word){
-
-	Tnode * head = root;
-
-	for(char &c : word){
-		
-		if(head->child[c-'a'] != NULL){
-			head= head->child[c-'a'];
-		}
-		else{
-			return 0; // not found the word
-		}
-	}
-
-	if(head->isEnd){
-		return head->no_of_occurence;
-	}
-
+int main (){
+	vector<string> words = {"Welcome","to","the","world","of","Geeks","This","portal","has","been","created","to","provide","well","written","well","thought","and","well","explained","solutions","for","selected","questions","If","you","like","Geeks","for","Geeks","and","would","like","to","contribute","here","is","your","chance","You","can","write","article","and","mail","your","article","to","contribute","at","geeksforgeeks","org","See","your","article","appearing","on","the","Geeks","for","Geeks","main","page","and","help","thousands","of","other","Geeks"};
+	print_array(words);
+	cout << "\n\nThe 7 most occuring words in the paragraph are: \n";
+	print_k_most_frequent_word(words,7);
 	return 0;
-}
 
-void insert_in_unordered_map(unordered_map<string,int> &umap,string word){
-
-
-	unordered_map<string,int>::iterator it = umap.find(word);
-
-	if(it==umap.end()){
-		umap.insert({{word,1}});
-	}
-	else{
-		umap.insert({{word,it->second++}});
-	}
-
-}
-
-int main(){
-
-	Tnode * root = get_new_tnode();
-	string word = "abc";
-
-	priority_queue<qnode,vector<qnode>, decltype(&compare)> pq(&compare);
-
-	unordered_map<string,int> umap;
-
-	vector<string> word_arr = {"aaa","aaa", "aaaan","dddd", "ddffd", "dddd"};
-
-	for(string &word : word_arr){
-		insert_word(root,word,pq);
-		insert_in_unordered_map(umap,word);
-	}
-
-	while(!pq.empty()){
-
-		qnode qn = pq.top();
-		cout << qn.word << " == " << qn.no_of_occurence << "\n";
-	       	pq.pop();	
-	}
-
-	/*for(string &word : word_arr){
-		cout << word  << " " << search_word(root, word) << "\n";
-	}
-	*/
-
-	vector<qnode> words;
-
-	cout << "unsorted frequency\n";
-	for (auto &it : umap){
-		qnode qn = {it.first,it.second};
-		cout << it.first << "  " << it.second << "\n";
-		words.push_back(qn);
-	}
-
-	sort(words.begin(),words.end(),compare);
-
-
-	cout << "sorted frequency\n";
-
-	for(auto &it : words){
-		cout << it.word << "  " << it.no_of_occurence << "\n";
-	}
-
-
-	return 0;
 }
