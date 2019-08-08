@@ -81,6 +81,46 @@ bool is_plaindrome(Node * head1){
 
 
 
+
+
+void print(Node * head){
+
+	if(head == NULL){
+		cout << "\n";
+		return;
+	}
+	
+	cout << head->data << " ";
+	print(head->next);
+}
+
+bool is_palindrome_with_extra_space (Node * head){
+	
+	Node * node = head;
+	Node * head2 =NULL;
+
+	while (node !=NULL){
+		Node * temp = get_new_node(node->data);
+		
+		temp->next = head2;
+		head2 = temp;
+
+		node = node->next;
+	}
+
+	while(head !=NULL && head2 != NULL){
+
+		if(head->data != head2->data){
+			return false;
+		}
+		head = head->next;
+		head2 = head2->next;
+	}
+
+	return true;
+}
+
+
 int main(){
 
 
@@ -88,9 +128,11 @@ int main(){
 	head->next = get_new_node('b');
 	head->next->next = get_new_node('b');
 	head->next->next->next = get_new_node('a');
-	//head->next->next->next->next = get_new_node('c');
+	head->next->next->next->next = get_new_node('c');
 
-	cout << "Is plaindrome " << is_plaindrome(head) << "\n";
+	cout << "Is plaindrome " << is_plaindrome(head) << "\n"; // optimize solution
+
+	//cout << is_palindrome_with_extra_space(head);
     	
 	return 0;
 
